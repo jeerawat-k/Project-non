@@ -45,6 +45,11 @@ background: linear-gradient(180deg, rgba(235,102,55,0.8916608879880077) 0%, rgba
 .sidenav a:hover {
   color: #f1f1f1;
 }
+.tbHeader {
+      	background: #3c8dbc;
+      	color: white;
+}
+
 
 .sidenav .closebtn {
   position: absolute;

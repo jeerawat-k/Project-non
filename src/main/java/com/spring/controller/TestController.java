@@ -31,7 +31,7 @@ public class TestController {
 	public @ResponseBody
 	List<Expenditure> getDataExpenditureById(HttpSession session){
 		try{
-			List<Expenditure> result = expenditureService.getExpenditureById();
+			List<Expenditure> result = expenditureService.getExpenditureAll();
 			return result;
 		}catch (Exception e){
 			System.out.println("Exception : "+e);

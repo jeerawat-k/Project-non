@@ -13,7 +13,7 @@ public class User {
     private Integer age;
 
 
-    private Integer idUser;
+
 
     public Integer getId() {
         return id;
@@ -39,11 +39,5 @@ public class User {
         this.age = age;
     }
 
-    public Integer getIdUser() {
-        return idUser;
-    }
 
-    public void setIdUser(Integer idUser) {
-        this.idUser = idUser;
-    }
 }

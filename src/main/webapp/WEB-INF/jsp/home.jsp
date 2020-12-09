@@ -7,7 +7,12 @@
 <head>
 <link rel="preconnect" href="https://fonts.gstatic.com">
 <link href="https://fonts.googleapis.com/css2?family=Mali:wght@300&display=swap" rel="stylesheet">
+
 <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
 
 <style>
 	a{
@@ -59,6 +64,14 @@
       border-radius: 0 !important;
      }
 
+
+table.dataTable thead th, table.dataTable thead td {
+    padding: 10px 18px;
+    border-bottom: 1px solid #ddd;
+}
+table.dataTable.no-footer {
+    border-bottom: 1px solid  #ddd;
+}
 
 
 </style>
@@ -123,7 +136,9 @@
                             <label for="email">รายการ :</label>
                         </div>
                        <div class="col-sm-4">
-                            <input type="email" class="form-control" id="idItem">
+                             <select class="form-control" id="selectItemsId" style="width: 100%;" data-placeholder="เลือก" onChange="">
+                                    <option>...</option>
+                            </select>
                        </div>
 
                    </div>
@@ -173,6 +188,8 @@
                                       </div>
                                      <div class="col-sm-4">
                                           <input type="email" class="form-control" id="idItemInput">
+
+                                        </select>
                                      </div>
 
                                  </div>
@@ -220,41 +237,13 @@
          document.body.style.marginLeft = "250px";
          $( document ).ready(function() {
 
-            renderDataExpenditure('NON')
+            ajaxGetExpenditureByUserId('NON');
             renderPanel('01')
             findDataItems()
         });
 
-         function renderDataExpenditure(param){
-          var render =""
-             $.ajax({
-                   type: 'GET',
-                   url: 'getDataExpenditureById',
-                  }).done(function(data){
-                   if(data.length!=0){
-                    $('#tobodyId').empty();
-                    $.each(data,function(index,value){
-                             $('#tobodyId').append('<tr>'+
-                                           '<td>'+value.items.itemName+'</td>'+
-                                           '<td style="text-align:right" >'+value.amount+'</td>'+
-                                           '<td style="text-align:right" >'+value.income+'</td>'+
-                                         '</tr>'
-                                         )
 
-                    })
 
-                   }
-
-                  }).fail(function(){
-
-                  });
-         if('NON'===param){
-
-         }else if('PAI'===param){
-
-         }
-
-         }
 
  function insertExpenditure(){
          var items = $('#idItem').val()
@@ -286,15 +275,15 @@
                 $('.panel-heading h4').html('')
                 $('.panel-heading h4').append('ค่าใช้จ่าย')
                      $('#panelBodyId').append( '<ul class="nav nav-tabs" style="margin-bottom: 10px;">'+
-                                                     '<li class ="active"><a data-toggle="tab" onClick="renderDataExpenditure("NON")" href="#menu1" style="color: black"><h5>NON</h5></a></li>'+
-                                                        '<li><a data-toggle="tab" href="#menu2"  onClick="renderDataExpenditure("PAI")" ><h5 style="color: black">PAI FOO</h5></a></li>'+
+                                                     '<li class ="active"><a data-toggle="tab" onClick="ajaxGetExpenditureByUserId("01")" href="#menu1" style="color: black"><h5>NON</h5></a></li>'+
+                                                        '<li><a data-toggle="tab" href="#menu2"  onClick="ajaxGetExpenditureByUserId("02")"  ><h5 style="color: black">PAI FOO</h5></a></li>'+
                                                 '</ul>'+
                                             '<div class="tab-content" >'+
-                                          '<button type="button" class="btn btn-primary"  data-toggle="modal" data-target="#myModal" >เพิ่ม</button>'+
-                                           '<button type="button" class="btn btn-danger">ลบ</button>'+
+                                          '<button type="button" class="btn btn-primary"  data-toggle="modal" data-target="#myModal"  style="margin-bottom:10px;" >เพิ่ม</button>'+
+                                           '&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-danger" style="margin-bottom:10px;">ลบ</button>'+
                                           '<div id="menu1" class="tab-pane fade in active">'+
-                                          '<table class="table table-bordered" style="margin-top: 10px;">'+
-                                                  '<thead>'+
+                                          '<table class="table table-striped table-bordered" style="margin-top: 10px;" id="table_id">'+
+                                                  '<thead class="tbHeader">'+
                                                     '<tr>'+
                                                       '<th>รายการ</th>'+
                                                       '<th>รายจ่าย</th>'+
@@ -310,9 +299,19 @@
                                                 '</table>'+
                                                '</div>'+
                                                 '<div id="menu2" class="tab-pane fade">'+
-                                                     '<h3>Menu 2</h3>'+
-                                                     '<p>Some content in menu 2.</p>'+
-                                                   '</div>'+
+                                                    '<table class="table table-bordered" style="margin-top: 10px;">'+
+                                                                                                     '<thead>'+
+                                                                                                       '<tr>'+
+                                                                                                         '<th>รายการ</th>'+
+                                                                                                         '<th>รายจ่าย</th>'+
+                                                                                                         '<th>รายรับ</th>'+
+                                                                                                       '</tr>'+
+                                                                                                     '</thead>'+
+
+                                                                                                     '<tfoot id="tfootId">'+
+                                                                                                     '</tfoot>'+
+
+                                                                                                   '</table>'+
                                              '</div>'
                      )
                  }else if("02"===param){
@@ -332,9 +331,7 @@
                                                       '<th>ชื่อรายการ(รายจ่าย)</th>'+
                                                     '</tr>'+
                                                   '</thead>'+
-                                                  '<tbody id="tobodyIdItem">'+
 
-                                                  '</tbody>'+
                                                   '<tfoot id="tfootId">'+
                                                   '</tfoot>'+
 
@@ -347,7 +344,7 @@
                                              '</div>'
                      )
 
-renderItemsToTable()
+                renderItemsToTable()
                  }else if("03"===param){
 
                 }
@@ -366,14 +363,16 @@ renderItemsToTable()
 
   }
    jQuery.ajax({
-             url : "ajaxInsertItems",
+             url : "itemsCon/ajaxInsertItems",
              type : "post",
              contentType : "application/json",
              data : JSON.stringify(json),
              dataType : 'json',
              success : function(obj) {
-               $('#addItems').modal('toggle');
-
+               $('#addItems').hide();
+            findDataItems()
+            renderItemsToTable()
+            $('#idItemInput').val('')
              }
          });
  }
@@ -383,14 +382,33 @@ renderItemsToTable()
                      type: 'GET',
                      async:false,
                      url: 'itemsCon/findAllItems',
-                    }).done(function(data){
-                    itemsGlobal = data
+                    }).done(function(obj){
+
+                    if(obj.length!=0){
+                    var select = document.getElementById('selectItemsId');
+                     $('#selectItemsId').find('option').remove().end();
+
+                       	for (var i = 0; i < obj.length; i++) {
+	                    var opt = document.createElement('option');
+						opt.value = obj[i].id;
+						opt.innerHTML = obj[i].itemName;
+						select.appendChild(opt);
+						}
+
+                                     itemsGlobal = obj
+                    }
+
                 })
+                  $('#selectItemsId').select2({
+                        dropdownAutoWidth: true,
+                        width: 'auto'
+                     });
 
 }
 
 function renderItemsToTable(){
     var strStatus;
+     $('#tobodyIdItem').empty();
         if(itemsGlobal.length!=0){
             $.each(itemsGlobal,function(index,value){
               strStatus = ''
@@ -413,6 +431,98 @@ function renderItemsToTable(){
         }
 
 }
+
+
+ function insertExpenditure(){
+ var statusFlag ='';
+
+
+  var json = {
+        'income' : $('#idIncome').val() == "" ? 0 : $('#idIncome').val(),
+        'amount' : $('#idAmount').val() == "" ? 0 : $('#idAmount').val(),
+        'itemId' :  $('#selectItemsId').val(),
+        'user' : '1737'
+
+  }
+   jQuery.ajax({
+             url : "expenditureCon/ajaxInsertExpenditureCon",
+             type : "post",
+             contentType : "application/json",
+             data : JSON.stringify(json),
+             dataType : 'json',
+             success : function(obj) {
+               $('#myModal').hide();
+               $('#myModal').val('')
+               ajaxGetExpenditureByUserId('NON')
+             }
+         });
+ }
+
+ function ajaxGetExpenditureByUserId(param){
+    $('#table_id').DataTable();
+    var userId;
+           if('NON'===param){
+            userId = '1737'
+           }else if('PAI'===param){
+            userId = '2839'
+          }
+           var render =""
+           $.ajax({
+                 type: 'GET',
+                 url: 'expenditureCon/ajaxGetExpenditureByUserId?userId='+userId,
+                }).done(function(data){
+                 if(data.length!=0){
+                   $('#table_id tbody').remove();
+                  $.each(data,function(index,value){
+
+                    console.log(value)
+                     $('#table_id').dataTable({
+	    	            "searching" : false,
+	    	            "bSort" : true,
+	    	            "paging" : true,
+	    	            "bFilter" : false,
+	    	            "data" : data,
+	    	            "destroy": true,
+	    	            "info" : false,
+	    	            "pageLength": 10,
+	    	            "aaSorting": [],
+	    	            "responsive": true,
+	    	            "dom": 'lrtip',
+	    	            "columns" : [
+                            {"data" : "ITEM_NAME","className" : "text-left text-nowrap" ,"value":"ITEM_NAME", orderable : true},
+                             {"data" : "AMOUNT","className" : "text-right text-nowrap", orderable : true},
+                             {"data" : "INCOME","className" : "text-right text-nowrap", orderable : true},
+	    	            ],
+	    	            "language": {
+	    	                "emptyTable": "-- ไม่พบข้อมูลที่ค้นหา --",
+	    	                "info": "แสดง _START_ ถึง _END_ จากทั้งหมด _TOTAL_ รายการ",
+	    	                "lengthMenu": "แสดง _MENU_ รายการ",
+	    	                "paginate" : {
+	    	                    "first":      "หน้าแรก",
+	    	                    "previous":   "ก่อนหน้า",
+	    	                    "next":       "ถัดไป",
+	    	                    "last":       "หน้าสุดท้าย"
+	    	                }
+	    	            },
+	    	            "columnDefs" : [{}]
+	    	            ,"initComplete" : function(row, data, index) {
+
+	    	            }
+	    	        });
+
+                  })
+
+                 }
+
+                }).fail(function(){
+
+                });
+
+ }
+
+ function formatCurry(val){
+   return val.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+ }
 
  </script>
 

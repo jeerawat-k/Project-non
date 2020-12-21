@@ -27,11 +27,12 @@ public class ExpenditureCustomRepository {
             sql.append(" ,U.NAME AS USER_NAME \n ");
             sql.append(" ,U.AGE \n ");
             sql.append(" ,I.ID AS CODE_ITEM \n ");
-            sql.append(" ,I.ITEM_NAME \n ");
+            sql.append(" ,I.ITEM_NAME,E.CREATE_DATE,E.REMARK \n ");
             sql.append(" FROM EXPENDITURE E \n ");
             sql.append(" INNER JOIN USER U ON E.ID_USER = U.ID \n ");
             sql.append(" INNER JOIN ITEMS I ON E.ID_ITEM = I.ID \n ");
             sql.append(" WHERE E.ID_USER = '"+userId+"' \n ");
+            System.out.println(" SQL : "+sql.toString());
             resultList = jdbcTemplateSQLLite.queryForList(sql.toString());
 
             return resultList;

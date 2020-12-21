@@ -21,6 +21,8 @@ public class Expenditure {
     private Double income;
     private Double amount;
     private String flg;
+    private String createDate;
+    private String remark;
 
     public Integer getId() {
         return id;
@@ -68,5 +70,21 @@ public class Expenditure {
 
     public void setFlg(String flg) {
         this.flg = flg;
+    }
+
+    public String getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(String createDate) {
+        this.createDate = createDate;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }

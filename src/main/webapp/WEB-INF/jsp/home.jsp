@@ -28,6 +28,7 @@
 
     }
 
+
     .card:hover {
       box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
     }
@@ -72,6 +73,8 @@ table.dataTable thead th, table.dataTable thead td {
 table.dataTable.no-footer {
     border-bottom: 1px solid  #ddd;
 }
+
+
 
 
 </style>
@@ -128,11 +131,10 @@ table.dataTable.no-footer {
                       <button type="button" class="close" data-dismiss="modal">&times;</button>
                       <h4 class="modal-title"><b>เพิ่ม Expenditure</b></h4>
                     </div>
-                    <div class="modal-body" style="height:130px;">
+                    <div class="modal-body" style="height:220px;">
                    <div class="row">
 
-
-                       <div class="col-sm-offset-2 col-sm-2">
+                       <div class="col-sm-offset-2 col-sm-2" style="text-align:right">
                             <label for="email">รายการ :</label>
                         </div>
                        <div class="col-sm-4">
@@ -143,7 +145,7 @@ table.dataTable.no-footer {
 
                    </div>
                     <div class="row" style="margin-top: 5px;">
-                      <div class="col-sm-offset-2 col-sm-2">
+                      <div class="col-sm-offset-2 col-sm-2" style="text-align:right">
                            <label for="email">รายรับ :</label>
                        </div>
                       <div class="col-sm-4">
@@ -151,13 +153,34 @@ table.dataTable.no-footer {
                       </div>
                   </div>
                    <div class="row" style="margin-top: 5px;">
-                        <div class="col-sm-offset-2 col-sm-2">
+                        <div class="col-sm-offset-2 col-sm-2" style="text-align:right">
                              <label for="email">รายจ่าย :</label>
                          </div>
                         <div class="col-sm-4">
                              <input type="email" class="form-control" id="idAmount">
                         </div>
-                    </div>
+                   </div>
+                    <div class="row" style="margin-top: 5px;">
+                           <div class="col-sm-offset-2 col-sm-2" style="text-align:right">
+                                <label for="email">วันที่ :</label>
+                            </div>
+
+                           <div class="col-sm-4">
+                                  <div class='input-group date' id='datetimepicker'>
+                                     <input type="text" class="form-control" id="idCreateDate">
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                 </div>
+                           </div>
+                      </div>
+
+                       <div class="row" style="margin-top: 5px;">
+                                              <div class="col-sm-offset-2 col-sm-2" style="text-align:right">
+                                                   <label for="email">Remark :</label>
+                                               </div>
+                                              <div class="col-sm-4">
+                                                   <input type="email" class="form-control" id="idRemark">
+                                              </div>
+                                         </div>
                </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-success" data-dismiss="modal" onClick="insertExpenditure()">บันทึก</button>
@@ -187,7 +210,7 @@ table.dataTable.no-footer {
                                           <label for="email">รายการ :</label>
                                       </div>
                                      <div class="col-sm-4">
-                                          <input type="email" class="form-control" id="idItemInput">
+                                          <input type="text" class="form-control" id="idItemInput">
 
                                         </select>
                                      </div>
@@ -236,10 +259,23 @@ table.dataTable.no-footer {
           document.getElementById("main").style.marginLeft = "0px";
          document.body.style.marginLeft = "250px";
          $( document ).ready(function() {
-
+                 $(".datepicker").css({"top": "542px", "left": "540px","z-index":"1060","display":"block"});
             ajaxGetExpenditureByUserId('NON');
             renderPanel('01')
             findDataItems()
+
+            $('#datetimepicker').datepicker({
+                    orientation: "auto",
+                    autoclose: true,
+                    format: 'dd/mm/yyyy',
+                    todayHighlight: true
+                });
+                $('#datetimepicker').click(function(){
+
+
+                      });
+
+
         });
 
 
@@ -268,10 +304,11 @@ table.dataTable.no-footer {
  }
 
  function renderPanel(param){
+    var user;
 
-
- $('#panelBodyId').empty()
+     $('#panelBodyId').empty()
                 if("01"===param){
+                user ='NON'
                 $('.panel-heading h4').html('')
                 $('.panel-heading h4').append('ค่าใช้จ่าย')
                      $('#panelBodyId').append( '<ul class="nav nav-tabs" style="margin-bottom: 10px;">'+
@@ -285,9 +322,11 @@ table.dataTable.no-footer {
                                           '<table class="table table-striped table-bordered" style="margin-top: 10px;" id="table_id">'+
                                                   '<thead class="tbHeader">'+
                                                     '<tr>'+
-                                                      '<th>รายการ</th>'+
-                                                      '<th>รายจ่าย</th>'+
-                                                      '<th>รายรับ</th>'+
+                                                      '<th class="text-center">รายการ</th>'+
+                                                      '<th class="text-center">รายจ่าย</th>'+
+                                                      '<th class="text-center">รายรับ</th>'+
+                                                      '<th class="text-center">วันที่</th>'+
+                                                      '<th class="text-center">Remark</th>'+
                                                     '</tr>'+
                                                   '</thead>'+
                                                   '<tbody id="tobodyId">'+
@@ -300,7 +339,7 @@ table.dataTable.no-footer {
                                                '</div>'+
                                                 '<div id="menu2" class="tab-pane fade">'+
                                                     '<table class="table table-bordered" style="margin-top: 10px;">'+
-                                                                                                     '<thead>'+
+                                                                                                     '<thead class="tbHeader" >'+
                                                                                                        '<tr>'+
                                                                                                          '<th>รายการ</th>'+
                                                                                                          '<th>รายจ่าย</th>'+
@@ -317,18 +356,17 @@ table.dataTable.no-footer {
                  }else if("02"===param){
                  $('.panel-heading h4').html('')
                  $('.panel-heading h4').append('ประเภทรายได้/อื่นๆ')
-
                         $('#panelBodyId').append(
                                             '<div class="tab-content" >'+
-                                          '<button type="button" class="btn btn-primary"  data-toggle="modal" data-target="#addItems" >เพิ่ม</button>'+
-                                           '<button type="button" class="btn btn-danger">ลบ</button>'+
+                                          '<button type="button" class="btn btn-primary"  data-toggle="modal" data-target="#addItems" style="margin-bottom:10px;" >เพิ่ม</button>'+
+                                           '&nbsp;&nbsp;&nbsp;<button type="button" style="margin-bottom:10px;"  class="btn btn-danger">ลบ</button>'+
                                           '<div id="menu1" class="tab-pane fade in active">'+
-                                          '<table class="table table-bordered" style="margin-top: 10px;">'+
-                                                  '<thead>'+
+                                          '<table class="table table-bordered" style="margin-top: 10px;" id="table_id_items" >'+
+                                                  '<thead class="tbHeader">'+
                                                     '<tr>'+
-                                                     '<th>รหัส</th>'+
-                                                     '<th>ชื่อรายการ(รายรับ)</th>'+
-                                                      '<th>ชื่อรายการ(รายจ่าย)</th>'+
+                                                     '<th class="text-center" >รหัส</th>'+
+                                                     '<th class="text-center" >ชื่อรายการ(รายรับ)</th>'+
+                                                      '<th class="text-center" >ชื่อรายการ(รายจ่าย)</th>'+
                                                     '</tr>'+
                                                   '</thead>'+
 
@@ -344,10 +382,13 @@ table.dataTable.no-footer {
                                              '</div>'
                      )
 
-                renderItemsToTable()
+                    renderItemsToTable()
+
                  }else if("03"===param){
 
                 }
+
+                 ajaxGetExpenditureByUserId(user)
 
  }
 
@@ -410,24 +451,65 @@ function renderItemsToTable(){
     var strStatus;
      $('#tobodyIdItem').empty();
         if(itemsGlobal.length!=0){
-            $.each(itemsGlobal,function(index,value){
-              strStatus = ''
-               if(value.flg==="IN"){
-               strStatus =   '<td style="text-align:left" >'+value.itemName+'</td>'
-                strStatus += '<td style="text-align:center" > - </td>'
-               }else{
-                strStatus = '<td style="text-align:center" > - </td>'
-                strStatus +=   '<td style="text-align:left" >'+value.itemName+'</td>'
+                  $('#table_id_items tbody').remove();
+                             $.each(itemsGlobal,function(index,value){
+                                  $('#table_id_items').dataTable({
+           	    	            "searching" : false,
+           	    	            "bSort" : true,
+           	    	            "paging" : true,
+           	    	            "bFilter" : false,
+           	    	            "data" : itemsGlobal,
+           	    	            "destroy": true,
+           	    	            "info" : false,
+           	    	            "pageLength": 10,
+           	    	            "aaSorting": [],
+           	    	            "responsive": true,
+           	    	            "dom": 'lrtip',
+           	    	            "columns" : [
+                                       {"data" : "id","className" : "text-center text-nowrap" ,"value":"ITEM_NAME", orderable : true},
+                                       {"data" : null,"className" : "text-left text-nowrap","id":"productId", orderable : true, render :
+                                        function(o) {
+                                          var ret ;
+                                                    if(o.flg=='IN'){
+                                                    ret ="<td class='text-left text-nowrap' name='itemName'>"+o.itemName+"</td>"
+                                                    }else{
+                                                        ret = "-"
+                                                    }
+                                                  return ret;
+                                            }
+                                        },
+                                        {"data" : null,"className" : "text-left text-nowrap","id":"productId", orderable : true, render :
+                                                                              function(o) {
+                                                                                var ret ;
+                                                                                          if(o.flg=='OUT'){
+                                                                                          ret ="<td class='text-center text-nowrap' name='itemName'>"+o.itemName+"</td>"
+                                                                                          }else{
+                                                                                          ret = "-"
+                                                                                          }
+                                                                                        return ret;
+                                                                                  }
+                                                                              },
+           	    	            ],
+           	    	            "language": {
+           	    	                "emptyTable": "-- ไม่พบข้อมูลที่ค้นหา --",
+           	    	                "info": "แสดง _START_ ถึง _END_ จากทั้งหมด _TOTAL_ รายการ",
+           	    	                "lengthMenu": "แสดง _MENU_ รายการ",
+           	    	                "paginate" : {
+           	    	                    "first":      "หน้าแรก",
+           	    	                    "previous":   "ก่อนหน้า",
+           	    	                    "next":       "ถัดไป",
+           	    	                    "last":       "หน้าสุดท้าย"
+           	    	                }
+           	    	            },
+           	    	            "columnDefs" : [{}]
+           	    	            ,"initComplete" : function(row, data, index) {
 
-               }
-               console.log(strStatus)
-              $('#tobodyIdItem').append('<tr>'+
-                           '<td>'+value.id+'</td>'+
-                            strStatus+
-                         '</tr>'
-                         )
+           	    	            }
+           	    	        });
 
-            })
+                             })
+
+
         }
 
 }
@@ -441,7 +523,9 @@ function renderItemsToTable(){
         'income' : $('#idIncome').val() == "" ? 0 : $('#idIncome').val(),
         'amount' : $('#idAmount').val() == "" ? 0 : $('#idAmount').val(),
         'itemId' :  $('#selectItemsId').val(),
-        'user' : '1737'
+        'user' : '1737',
+        'createDate':$('#idCreateDate').val()=="" ? null :$('#idCreateDate').val() ,
+        'remark' : $('#idRemark').val()=="" ? null :$('#idRemark').val()
 
   }
    jQuery.ajax({
@@ -474,9 +558,7 @@ function renderItemsToTable(){
                  if(data.length!=0){
                    $('#table_id tbody').remove();
                   $.each(data,function(index,value){
-
-                    console.log(value)
-                     $('#table_id').dataTable({
+                       $('#table_id').dataTable({
 	    	            "searching" : false,
 	    	            "bSort" : true,
 	    	            "paging" : true,
@@ -490,8 +572,22 @@ function renderItemsToTable(){
 	    	            "dom": 'lrtip',
 	    	            "columns" : [
                             {"data" : "ITEM_NAME","className" : "text-left text-nowrap" ,"value":"ITEM_NAME", orderable : true},
-                             {"data" : "AMOUNT","className" : "text-right text-nowrap", orderable : true},
-                             {"data" : "INCOME","className" : "text-right text-nowrap", orderable : true},
+                               {"data" : null,"className" : "text-right text-nowrap","id":"productId", orderable : true, render :
+                                                          function(o) {
+
+                                                                      ret ="<td class='text-right text-nowrap' name='itemName'>"+formatCurry(o.AMOUNT)+"</td>"
+
+                                                                    return ret;
+                                                              }
+                                      },
+                            {"data" : null,"className" : "text-right text-nowrap","id":"productId", orderable : true, render :
+                             function(o) {
+                                   ret ="<td class='text-right text-nowrap' name='itemName'>"+formatCurry(o.INCOME)+"</td>"
+                                   return ret;
+                                 }
+                             },
+                             {"data" : "CREATE_DATE","className" : "text-center text-nowrap" ,"value":"CREATE_DATE", orderable : true},
+                             {"data" : "REMARK","className" : "text-center text-nowrap" ,"value":"REMARK", orderable : true},
 	    	            ],
 	    	            "language": {
 	    	                "emptyTable": "-- ไม่พบข้อมูลที่ค้นหา --",
@@ -520,7 +616,7 @@ function renderItemsToTable(){
 
  }
 
- function formatCurry(val){
+     function formatCurry(val){
    return val.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
  }
 

@@ -68,6 +68,8 @@ public class ExpenditureServiceImpl implements ExpenditureService{
             JSONObject jsonObject = new JSONObject(json);
             Double incomeVal = jsonObject.get("income").toString()=="" ? 0d:  Double.parseDouble(jsonObject.get("income").toString());
             Double amountVal = jsonObject.get("amount").toString()=="" ? 0d:  Double.parseDouble(jsonObject.get("amount").toString());
+            String createDateVal =jsonObject.get("createDate").toString()=="" ? "":  jsonObject.get("createDate").toString();
+            String remarkVal =jsonObject.get("remark").toString()=="" ? "":  jsonObject.get("remark").toString();
             Integer userId = Integer.parseInt(jsonObject.get("user").toString());
             Integer itemId = Integer.parseInt(jsonObject.get("itemId").toString());
             Expenditure expenditureNew = new Expenditure();
@@ -78,6 +80,8 @@ public class ExpenditureServiceImpl implements ExpenditureService{
             user = userRepository.findOne(userId);
             expenditureNew.setItems(items);
             expenditureNew.setUser(user);
+            expenditureNew.setCreateDate(createDateVal);
+            expenditureNew.setRemark(remarkVal);
             expenditureNew.setAmount(amountVal);
             expenditureNew.setIncome(incomeVal);
             expenditureRepository.save(expenditureNew);

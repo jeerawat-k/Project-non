@@ -6,9 +6,17 @@
 <meta http-equiv="Content-Language" content="th" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Welcome</title>
-    <link href="webjars/bootstrap/3.3.6/css/bootstrap.min.css"
-        rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="webjars/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="webjars/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" />
+    <link rel="stylesheet" href="webjars/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.css" />
+    <link rel="stylesheet" href="webjars/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker3.min.css" />
+    <link rel="stylesheet" href="webjars/jquery-ui/1.12.1/jquery-ui.css" />
+    <link rel="stylesheet" href="webjars/jquery-ui/1.12.1/jquery-ui.min.css" />
+    <link rel="stylesheet" href="webjars/jquery-ui/1.12.1/jquery-ui.theme.css" />
+    <link rel="stylesheet" href="webjars/jquery-ui/1.12.1/jquery-ui.theme.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
     <style>
   body {
 
@@ -85,7 +93,9 @@ background: linear-gradient(180deg, rgba(235,102,55,0.8916608879880077) 0%, rgba
 
 .panel-heading{
  box-shadow:0 1px 1px -1px rgba(0, 0, 0, 0.34), 0 0 6px 0 rgba(0, 0, 0, 0.14);
+
 }
+
 
 
 
@@ -180,7 +190,11 @@ color: white;
      .radio label input[type="radio"]:disabled + .cr {
          opacity: .5;
      }
-	
+.datepicker{
+    left : 540 !important;
+    margin-left : 250px;
+}
+
 		
     </style>
 </head>
@@ -211,15 +225,19 @@ color: white;
 		</div>
 		
 		
-		
-  
-		
-        <script src="webjars/jquery/1.9.1/jquery.min.js"></script>
-        <script src="webjars/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+		    <script src="webjars/momentjs/2.24.0/moment.js"></script>
+            <script src="webjars/momentjs/2.24.0/min/moment.min.js"></script>
+            <script src="webjars/jquery/1.9.1/jquery.min.js"></script>
+            <script src="webjars/jquery/1.9.1/jquery.js"></script>
+            <script src="webjars/jquery-ui/1.12.1/jquery-ui.js"></script>
+            <script src="webjars/jquery-ui/1.12.1/jquery-ui.min.js"></script>
+             <script src="webjars/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+            <script src="webjars/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+            <script src="webjars/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.js"></script>
+
         <script>
         $( document ).ready(function() {
 
-        	
         });
         function openNav() {
         	  document.getElementById("mySidenav").style.width = "250px";
@@ -229,9 +247,10 @@ color: white;
         	  document.body.style.marginLeft = "250px";
         	  
         }
+        document.getElementById("iconNon").style.paddingLeft  = "1150px";
 
        	function closeNav() {
-       		document.getElementById("iconNon").style.paddingLeft  = "1150px";
+       		  document.getElementById("iconNon").style.paddingLeft  = "1150px";
         	  document.getElementById("mySidenav").style.width = "0";
         	  document.getElementById("main").style.marginLeft= "0";
         	 /*  document.body.style.backgroundColor = "white";
